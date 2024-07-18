@@ -80,7 +80,6 @@ def main():
     all_indices = list(np.arange(args.num_images))
     val_indices = random.sample(all_indices, args.num_val)
     all_indices = np.setdiff1d(all_indices, val_indices)
-    # print(type(all_indices))
 
     train_sampler = SubsetRandomSampler(all_indices)
     val_sampler = SubsetRandomSampler(val_indices)
@@ -92,13 +91,7 @@ def main():
 
     task_model = CompAlexNet(num_classes=args.num_classes)
 
-    # task_model = torchvision.models.alexnet(weights='IMAGENET1K_V1')
-
-    # task_model.classifier[6] = torch.nn.Linear(4096, 10)
-
-    # task_model.load_state_dict(torch.load('/home/rrgaire/projects/icmla2023/alexnet/cifar10/single/checkpoints/CIFAR10_alexnet_task_model.pth'))
-    task_model.load_state_dict(torch.load('/home/rrgaire/projects/icmla2023/alexnet/cifar10/single/checkpoints/CIFAR10_compalexnet_single_100_model.pth'))
-    # task_model = train_models(args, task_model, train_dataloader, val_dataloader, logger)
+    task_model = train_models(args, task_model, train_dataloader, val_dataloader, logger)
 
 
     task_model.eval()

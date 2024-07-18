@@ -83,7 +83,6 @@ def main():
     all_indices = list(np.arange(args.num_images))
     val_indices = random.sample(all_indices, args.num_val)
     all_indices = np.setdiff1d(all_indices, val_indices)
-    # print(type(all_indices))
 
     initial_indices = random.sample(list(all_indices), args.initial_budget)
 
@@ -94,12 +93,6 @@ def main():
             batch_size=args.batch_size, drop_last=True)
     val_dataloader = torch.utils.data.DataLoader(train_dataset, sampler=val_sampler,
             batch_size=args.batch_size, drop_last=False)
-    
-
-    
-
-    # sampler
-
     
 
     splits = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
@@ -115,7 +108,6 @@ def main():
         classifier = Classifier(num_classes=args.num_classes)
 
         discriminator = Discriminator()
-        # task_model = AlexNet(num_classes=args.num_classes)
 
         unlabeled_indices = np.setdiff1d(list(all_indices), current_indices)
         unlabeled_sampler = torch.utils.data.sampler.SubsetRandomSampler(unlabeled_indices)
@@ -147,7 +139,6 @@ def main():
         logger.info(f'Split Percentage: {split} Test loss: {eval_loss:.8%}, Test Accuracy: {eval_accuracy:.4%}')
 
         sampled_indices = sample_for_labeling(args, args.budget, FE, discriminator, unlabeled_dataloader)
-        # sampled_indices = random.sample(list(unlabeled_indices), args.budget)
         current_indices = list(current_indices) + list(sampled_indices)
         sampler = torch.utils.data.sampler.SubsetRandomSampler(current_indices)
         querry_dataloader = torch.utils.data.DataLoader(train_dataset, sampler=sampler, 

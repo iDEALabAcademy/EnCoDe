@@ -86,7 +86,6 @@ def main():
     all_indices = list(np.arange(args.num_images))
     val_indices = random.sample(all_indices, args.num_val)
     all_indices = np.setdiff1d(all_indices, val_indices)
-    # print(type(all_indices))
 
     initial_indices = random.sample(list(all_indices), args.initial_budget)
 
@@ -103,7 +102,7 @@ def main():
 
     # sampler
 
-    splits = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+    splits = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
 
 
     current_indices = list(initial_indices)
@@ -130,7 +129,7 @@ def main():
         logger.info(len(list(current_indices)), len(list(unlabeled_indices)))
         
 
-        # FE, classifier = train_models(args, orig_model, FE, classifier, decoder, querry_dataloader, val_dataloader, unlabeled_dataloader, logger)
+        FE, classifier = train_models(args, orig_model, FE, classifier, decoder, querry_dataloader, val_dataloader, unlabeled_dataloader, logger)
 
 
         FE.eval()
@@ -150,10 +149,7 @@ def main():
         torch.save(classifier.state_dict(), os.path.join(save_path, f'{args.dataset}_classifier_model_{split}.pth'))
         print(f'Split Percentage: {split} Test loss: {eval_loss:.8%}, Test Accuracy: {eval_accuracy:.4%}')
         logger.info(f'Split Percentage: {split} Test loss: {eval_loss:.8%}, Test Accuracy: {eval_accuracy:.4%}')
-        break
-        # sampled_indices = sample_for_labeling(args, args.budget, FE, discriminator, unlabeled_dataloader)
-        # sampled_indices = random.sample(list(unlabeled_indices), args.budget)
-        # quit()
+
         random.shuffle(unlabeled_indices)
         subset = unlabeled_indices[:args.subset]
 
